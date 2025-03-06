@@ -14,21 +14,62 @@ const fetchGuestbook = async () => {
 
 const addEntry = async () => {
   if (!name.value || !message.value) return;
-  const { error } = await supabase.from('guestbook').insert([{ name: name.value, message: message.value }]);
-  if (error) console.error(error);
-  else {
+  
+  const { data, error } = await supabase.from('guestbook').insert([{ 
+    name: name.value, 
+    message: message.value 
+  }]);
+
+  if (error) {
+    console.error('Error inserting comment:', error);
+    alert('Failed to submit comment. Check console for details.');
+  } else {
+    console.log('Comment added:', data);
     name.value = '';
     message.value = '';
     fetchGuestbook(); // Refresh the list
   }
 };
 
+
 onMounted(fetchGuestbook);
 </script>
 
 <template>
   <div class="container">
-    <h1>Guestbook</h1>
+    <img :src="'/Mico1.jpg'" alt="Profile" class="profile-img" />
+    <h1>Abrech D. Dela Cruz</h1>
+    <p>I'm a Computer Science student from Asia Pacific College that is currently residing in Quezon City. I'm also a guitarist of a band called LArdy DArdy and OdeToTheMetz.</p>
+    
+    <h2>Education & Achievements</h2>
+    <ul>
+      <li>Graduated JHS</li>
+      <li>Graduated SHS</li>
+    </ul>
+
+    <h2>IT Experience</h2>
+    <ul>
+      <li>A love message website</li>
+      <li>A Python search engine where a message will pop that says a tree is planted for every 50 searches</li>
+    </ul>
+
+    <h2>Hobbies & Interests</h2>
+    <ul>
+      <li>Guitar, Music, Gym, Watching TV Series & Films</li>
+    </ul>
+
+    <h2>Goals</h2>
+    <ul>
+      <li>I want to be successful in life.</li>
+    </ul>
+
+    <h2>Picture Gallery</h2>
+    <div class="gallery">
+      <img v-for="i in 6" :key="i" :src="`/profile${i+1}.jpg`" alt="Gallery Image" class="gallery-img" />
+    </div>
+
+  <div class="container">
+    <h2>Guestbook</h2>
     
     <form @submit.prevent="addEntry">
       <input v-model="name" placeholder="Your Name" required />
